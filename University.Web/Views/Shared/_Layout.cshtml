@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"]</title>
+
+  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+  <link rel="stylesheet" href="~/css/site.css" />
+  @RenderSection("Styles", required: false)
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top ">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a asp-area="" asp-controller="Home" asp-action="Index"><img src="https://www.hust.edu.vn/hust-theme/images/home-button.png" /></a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          @if (SignInManager.IsSignedIn(User))
+          {
+            @if (User.IsInRole("SystemAdmin"))
+            {
+              <li><a asp-area="" asp-controller="Department" asp-action="Index">Khoa Viện</a></li>
+              <li><a asp-area="" asp-controller="SystemManager" asp-action="OpenEnrollmentCourse">Đăng ký lớp</a></li>
+            }
+            @if (User.IsInRole("DepartmentAdmin"))
+            {
+              <li><a asp-area="" asp-controller="Student" asp-action="IndexStudent">Danh sách sinh viên</a></li>
+              <li><a asp-area="" asp-controller="Teacher" asp-action="IndexTeacher">Danh sách giảng viên</a></li>
+              <li><a asp-area="" asp-controller="Course" asp-action="IndexCourse">Danh sách học phần</a></li>
+              <li><a asp-area="" asp-controller="Classroom" asp-action="IndexSemester">Đăng ký lớp</a></li>
+            }
+            @if (User.IsInRole("Student"))
+            {
+              <li><a asp-area="" asp-controller="Enrollment" asp-action="Index">Đăng ký lớp</a></li>
+              <li><a asp-area="" asp-controller="Enrollment" asp-action="StudentEnrollmentIndex">Lớp của tôi</a></li>
+            }
+            @if (User.IsInRole("Teacher"))
+            {
+              <li><a asp-area="" asp-controller="Enrollment" asp-action="Index">Danh sách lớp</a></li>
+            }
+          }
+        </ul>
+        <partial name="_LoginPartial" />
+      </div>
+    </div>
+  </nav>
+
+  <partial name="_CookieConsentPartial" />
+
+  <div class="container body-content">
+    <br />
+    <br />
+    @RenderBody()
+  </div>
+
+  <script src="~/lib/jquery/dist/jquery.js"></script>
+  <script src="~/lib/bootstrap-datetimepicker/moment.min.js"></script>
+  <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+  <script src="~/js/notify.js"></script>
+  <script src="~/js/site.js" asp-append-version="true"></script>
+
+  @RenderSection("Scripts", required: false)
+</body>
+</html>
